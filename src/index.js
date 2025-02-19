@@ -114,16 +114,59 @@ const init = () => {
   function renderFilter() {
     const filterHtml =
       `<input type='text' id='filterText' name='text' class='filter-input' placeholder='Filter by text...' />
-      <select id='filterSelect' name='select' class='filter-input'>
-        <option value='all' selected disabled>Type...</option>
+      <select id='filterSelectType' name='select' class='filter-select'>
+        <option value='all' selected>Show all (types)...</option>
         <option value='code'> Code </option>
          <option value='music'> Music </option>
       </select>
-      <button type='button' id='filterClear' name='clear' class="filter-button"> Clear Filter </button>
+    <select id='filterSelectPaid' name='paid' class='filter-select'>
+        <option value='all' selected>Show all (paid)...</option>
+        <option value='paid'> Paid </option>
+         <option value='free'> Free </option>
+      </select>
+      <button type='button' id='filterClear' name='clear' class="filter-button"> Clear Filter </button><br>
+          <select id='sortSelect' name='sort' class='filter-select'>
+        <option value='all' selected disabled>Sort...</option>
+        <option value='ascByTitle'> A-Z (title) </option>
+          <option value='descByTitle'> Z-A (title) </option>
+               <option value='ascByType'> A-Z (type) </option>
+         <option value='descByType'> Z-A (type) </option>
+           <option value='isPaid'> Paid </option>
+             <option value='isFree'> Free </option>
+      </select>
+            <button type='button' id='sortClear' name='clear' class="sort-button"> Clear Sort </button>
       `
 
     filter.innerHTML = filterHtml
+
+    document.getElementById('filterText').addEventListener('input', handleFilterText)
+    document.getElementById('filterSelectType').addEventListener('change', handleFilterSelectType)
+    document.getElementById('filterSelectPaid').addEventListener('change', handleFilterSelectPaid)
+    document.getElementById('filterClear').addEventListener('click', handleFilterClear)
   }
+
+  //filter by text
+  function handleFilterText(e) {
+
+  }
+
+  //filter by type
+  function handleFilterSelectType(e) {
+
+  }
+
+  //filter by paid
+  function handleFilterSelectPaid(e) {
+
+  }
+
+  //clear filter
+  function handleFilterClear(e) {
+
+  }
+
+
+
 
   //render list
   function renderList(data) {
