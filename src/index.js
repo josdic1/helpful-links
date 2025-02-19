@@ -52,7 +52,7 @@ const init = () => {
       <input type="text" id="inputType" class="form-input" name="type" placeholder="Link type goes here..." />
       <label for="inputPaid">Paid: </label>
       <input type="checkbox" id="inputPaid" class="form-input" name="paid" !checked/>
-      <button type='submit' class="form-button" name="submit" id="buttonSubmit">${inEditMode ? "Update" : "Add New"}</button>
+      <button type='submit' class="form-button" name="submit" id="buttonSubmit">Submit</button>
        <button type='button' class="form-button" name="clear" id="buttonClear">Clear</button>
       `
 
@@ -100,6 +100,7 @@ const init = () => {
 
 
   function handleClearClick() {
+    document.getElementById('buttonSubmit').textContent = "Submit"
     document.getElementById('inputTitle').value = ''
     document.getElementById('inputUrl').value = ''
     document.getElementById('inputType').value = ''
@@ -177,6 +178,7 @@ const init = () => {
         break;
       case 'edit':
         inEditMode = true
+        document.getElementById('buttonSubmit').textContent = "Update"
         onEditClick(linkObject)
         selectedLink = linkObject
         break;
