@@ -33,6 +33,14 @@ const init = () => {
   fetchLinks()
 
 
+  //render header
+  function renderHeader() {
+    const headerHtml =
+      `<p>${inEditMode ? "EDIT-MODE" : "VIEW-MODE"}</p>`
+
+  }
+
+
   //render form
   function renderForm() {
     const formHtml =
@@ -44,7 +52,7 @@ const init = () => {
       <input type="text" id="inputType" class="form-input" name="type" placeholder="Link type goes here..." />
       <label for="inputPaid">Paid: </label>
       <input type="checkbox" id="inputPaid" class="form-input" name="paid" !checked/>
-      <button type='submit' class="form-button" name="submit" id="buttonSubmit">Submit</button>
+      <button type='submit' class="form-button" name="submit" id="buttonSubmit">${inEditMode ? "Update" : "Add New"}</button>
        <button type='button' class="form-button" name="clear" id="buttonClear">Clear</button>
       `
 
@@ -64,13 +72,9 @@ const init = () => {
   // form handler fucntions
   function handleFormInput(e) {
     const { name, type, value, checked } = e.target
-    if (inEditMode) {
-      console.log('working on it...')
-    } else {
-      formData = {
-        ...formData,
-        [name]: type !== 'checkbox' ? value : checked
-      }
+    formData = {
+      ...formData,
+      [name]: type !== 'checkbox' ? value : checked
     }
   }
 
@@ -78,7 +82,15 @@ const init = () => {
     e.preventDefault()
     let formInput = {}
     if (inEditMode) {
-      console.log('working on it...')
+      selectedLink = {
+        ...selectedLink,
+        title: document.getElementById('inputTitle').value,
+        url: document.getElementById('inputUrl').value,
+        type: document.getElementById('inputType').value,
+        paid: document.getElementById('inputPaid').checked
+      }
+      formInput = selectedLink
+      handleUpdatedLink(formInput)
     } else {
       formInput = formData
       handleNewLink(formInput)
@@ -88,7 +100,10 @@ const init = () => {
 
 
   function handleClearClick() {
-
+    document.getElementById('inputTitle').value = ''
+    document.getElementById('inputUrl').value = ''
+    document.getElementById('inputType').value = ''
+    document.getElementById('inputPaid').value = false
   }
 
   //render list
@@ -161,6 +176,7 @@ const init = () => {
         selectedLink = linkObject
         break;
       case 'edit':
+        inEditMode = true
         onEditClick(linkObject)
         selectedLink = linkObject
         break;
@@ -182,6 +198,15 @@ const init = () => {
     }
   }
 
+  //edit button click
+  function onEditClick(obj) {
+    selectedLink = obj
+    document.getElementById('inputTitle').value = obj.title;
+    document.getElementById('inputUrl').value = obj.url;
+    document.getElementById('inputType').value = obj.type;
+    document.getElementById('inputPaid').checked = obj.paid;
+  }
+
 
 
   //async fucntions
@@ -197,6 +222,7 @@ const init = () => {
       links = data
       renderList(data)
       renderForm()
+      renderHeader()
     } catch (error) { console.error(error) }
   }
 
@@ -221,6 +247,22 @@ const init = () => {
     try {
       const r = await fetch(`http://localhost:3000/links/${obj.id}`, {
         method: 'DELETE'
+      })
+      if (!r.ok) {
+        throw new Error('DELETE: bad request')
+      }
+      await fetchLinks()
+    } catch (error) { console.error(error) }
+  }
+
+  async function handleUpdatedLink(updatedObj) {
+    try {
+      const r = await fetch(`http://localhost:3000/links/${updatedObj.id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(updatedObj)
       })
       if (!r.ok) {
         throw new Error('PATCH: bad request')
