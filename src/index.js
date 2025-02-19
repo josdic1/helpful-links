@@ -4,6 +4,7 @@ const init = () => {
   //DOM elements
   const header = document.getElementById('header')
   const form = document.getElementById('form')
+  const filter = document.getElementById('filter')
   const list = document.getElementById('list')
 
   //stateful variables
@@ -16,6 +17,7 @@ const init = () => {
     title: "",
     url: "",
     type: "",
+    description: "",
     paid: false
   }
 
@@ -24,6 +26,7 @@ const init = () => {
     title: "",
     url: "",
     type: "",
+    description: "",
     paid: false
   }
 
@@ -34,11 +37,7 @@ const init = () => {
 
 
   //render header
-  function renderHeader() {
-    const headerHtml =
-      `<p>${inEditMode ? "EDIT-MODE" : "VIEW-MODE"}</p>`
 
-  }
 
 
   //render form
@@ -50,10 +49,12 @@ const init = () => {
       <input type="url" id="inputUrl" class="form-input" name="url" placeholder="URL goes here..." />
       <label for="inputType">Type: </label>
       <input type="text" id="inputType" class="form-input" name="type" placeholder="Link type goes here..." />
+    <label for="inputDescription">Description: </label>
+      <input type="text" id="inputDescription" class="form-input" name="description" placeholder="10 words max..." />
       <label for="inputPaid">Paid: </label>
       <input type="checkbox" id="inputPaid" class="form-input" name="paid" !checked/>
       <button type='submit' class="form-button" name="submit" id="buttonSubmit">Submit</button>
-       <button type='button' class="form-button" name="clear" id="buttonClear">Clear</button>
+       <button type='button' class="form-button" name="clear" id="buttonClear">Clear Form</button>
       `
 
 
@@ -87,6 +88,7 @@ const init = () => {
         title: document.getElementById('inputTitle').value,
         url: document.getElementById('inputUrl').value,
         type: document.getElementById('inputType').value,
+        description: document.getElementById('inputDescription').value,
         paid: document.getElementById('inputPaid').checked
       }
       formInput = selectedLink
@@ -104,7 +106,23 @@ const init = () => {
     document.getElementById('inputTitle').value = ''
     document.getElementById('inputUrl').value = ''
     document.getElementById('inputType').value = ''
+    document.getElementById('inputDescription').value = ''
     document.getElementById('inputPaid').checked = false
+  }
+
+  //render filter
+  function renderFilter() {
+    const filterHtml =
+      `<input type='text' id='filterText' name='text' class='filter-input' placeholder='Filter by text...' />
+      <select id='filterSelect' name='select' class='filter-input'>
+        <option value='all' selected disabled>Type...</option>
+        <option value='code'> Code </option>
+         <option value='music'> Music </option>
+      </select>
+      <button type='button' id='filterClear' name='clear' class="filter-button"> Clear Filter </button>
+      `
+
+    filter.innerHTML = filterHtml
   }
 
   //render list
@@ -114,6 +132,7 @@ const init = () => {
         <td>${link.id}</td>
         <td>${link.title}</td>
         <td>${link.type}</td>
+        <td>${link.description}</td>
         <td>${link.paid ? "paid" : "free"}</td>
         <td>
           <button type='button' class='list-button' name='view' id=${link.id}>
@@ -129,7 +148,8 @@ const init = () => {
           <button type='button' class='list-button' name='del' id=${link.id}>
             Del
           </button>
-          <td>${link.url === "" ? "🚫 URL" : ""}</td>
+          <td>${link.url === "" ? "🚫 URL" : ""}
+          ${link.id === "" ? "🚫 ID" : ""}</td>
         </td>
       </tr>`
     ))
@@ -141,6 +161,7 @@ const init = () => {
             <th>ID</th>
             <th>Title</th>
             <th>Type</th>
+            <th>Description</th>
             <th>$$</th>
             <th>View</th>
             <th>Edit</th>
@@ -206,6 +227,7 @@ const init = () => {
     document.getElementById('inputTitle').value = obj.title;
     document.getElementById('inputUrl').value = obj.url;
     document.getElementById('inputType').value = obj.type;
+    document.getElementById('inputDescription').value = obj.description;
     document.getElementById('inputPaid').checked = obj.paid;
   }
 
@@ -224,7 +246,7 @@ const init = () => {
       links = data
       renderList(data)
       renderForm()
-      renderHeader()
+      renderFilter()
     } catch (error) { console.error(error) }
   }
 

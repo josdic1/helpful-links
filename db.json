@@ -5,21 +5,48 @@
       "url": "https://suno.com/create",
       "type": "music",
       "paid": true,
-      "id": "46cd"
+      "id": "46cd",
+      "description": "AI music generator using text prompts"
     },
     {
       "title": "udio",
       "url": "https://www.udio.com/my-creations",
       "type": "music",
       "paid": false,
-      "id": "75f0"
+      "id": "75f0",
+      "description": "AI music generator using text prompts"
     },
     {
       "title": "excalidraw",
       "url": "https://excalidraw.com/",
       "type": "code",
       "paid": false,
-      "id": "3df5"
+      "id": "3df5",
+      "description": "Wireframe hand-drawn style diagramming tool"
+    },
+    {
+      "id": "b4a3",
+      "title": "vite+",
+      "url": "http://localhost:5173",
+      "type": "code",
+      "description": "default development server address for Vite",
+      "paid": false
+    },
+    {
+      "id": "8701",
+      "title": "musicfy",
+      "url": "https://create.musicfy.lol/",
+      "type": "music",
+      "description": "AI voice changer and stem-splitter",
+      "paid": true
+    },
+    {
+      "id": "38f2",
+      "title": "tube ripper",
+      "url": "https://tuberipper.com/32/",
+      "type": "music",
+      "description": "Download audio from video streams",
+      "paid": false
     }
   ]
 }
