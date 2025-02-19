@@ -47,6 +47,14 @@
       "type": "music",
       "description": "Download audio from video streams",
       "paid": false
+    },
+    {
+      "id": "4202",
+      "title": "sora",
+      "url": "https://sora.com/library",
+      "type": "video",
+      "description": "AI video generation using text prompt",
+      "paid": false
     }
   ]
 }

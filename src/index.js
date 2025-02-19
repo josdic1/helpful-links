@@ -128,17 +128,17 @@ const init = () => {
         <option value='paid'> Paid </option>
          <option value='free'> Free </option>
       </select>
-      <button type='button' id='filterButtonClear' name='clear' class="filter-button"> Clear Filter </button><br>
+ 
           <select id='sortSelect' name='sort' class='filter-select'>
         <option value='all' selected disabled>Sort...</option>
         <option value='ascByTitle'> A-Z (title) </option>
           <option value='descByTitle'> Z-A (title) </option>
                <option value='ascByType'> A-Z (type) </option>
          <option value='descByType'> Z-A (type) </option>
-           <option value='isPaid'> A-Z (paid) </option>
-             <option value='isFree'> Z-A (paid) </option>
+           <option value='ascByPaid'> A-Z (paid) </option>
+             <option value='descByPaid'> Z-A (paid) </option>
       </select>
-            <button type='button' id='sortButtonClear' name='clear' class="filter-button"> Clear Sort </button>
+           <button type='button' id='filterButtonClear' name='clear' class="filter-button"> Clear All </button>
       `
 
     filter.innerHTML = filterHtml
@@ -153,7 +153,6 @@ const init = () => {
 
     document.getElementById('sortSelect').addEventListener('change', handleSortSelect)
 
-    document.getElementById('sortButtonClear').addEventListener('click', handleSortClear)
   }
 
 
@@ -184,6 +183,7 @@ const init = () => {
     document.getElementById('filterTitle').value = "";
     document.getElementById('filterSelectType').value = "all";
     document.getElementById('filterSelectPaid').value = "all";
+    document.getElementById('sortSelect').value = 'all'
     filterObj = {
       title: '',
       type: 'all',
@@ -196,13 +196,33 @@ const init = () => {
 
   //sort by selection
   function handleSortSelect(e) {
-
+    let sortedList = []
+    const { value } = e.target
+    switch (value) {
+      case "ascByTitle":
+        sortedList = [...links].sort((a, b) => a.title.localeCompare(b.title))
+        break;
+      case "descByTitle":
+        sortedList = [...links].sort((a, b) => b.title.localeCompare(a.title))
+        break;
+      case "ascByType":
+        sortedList = [...links].sort((a, b) => a.type.localeCompare(b.type))
+        break;
+      case "descByType":
+        sortedList = [...links].sort((a, b) => b.type.localeCompare(a.type))
+        break;
+      case "ascByPaid":
+        sortedList = [...links].sort((a, b) => Number(a.paid) - Number(b.paid))
+        break;
+      case "descByPaid":
+        sortedList = [...links].sort((a, b) => Number(b.paid) - Number(a.paid))
+        break;
+      default:
+        break;
+    }
+    renderList(sortedList)
   }
 
-  //clear sort
-  function handleSortClear() {
-
-  }
 
 
 
