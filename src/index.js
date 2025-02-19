@@ -67,13 +67,43 @@ const init = () => {
           </tr>
         </thead>
         <tbody>
-          ${linkList}
+          ${linkList.join('')}
         </tbody>
       </table>`
 
     list.innerHTML = listHtml
 
+    document.querySelectorAll('.list-button').forEach(btn => {
+      btn.addEventListener('click', handleListButtonClick)
+    })
+
   }
+
+  // handler function
+
+
+  function handleListButtonClick(e) {
+    const { id, name } = e.target
+    const linkObject = links.find(link => (
+      link.id === id
+    ))
+    switch (name) {
+      case 'view':
+        onViewClick(linkObject)
+        selectedLink = linkObject
+        break;
+      case 'edit':
+        onEditClick(linkObject)
+        selectedLink = linkObject
+        break;
+      case 'del':
+        handleDelete(linkObject)
+        break;
+      default:
+        break;
+    }
+  }
+
 
 
   //async fucntions
