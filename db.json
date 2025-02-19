@@ -1,16 +1,25 @@
 {
-   "links": [
-      {
-         "title": "suno",
-         "url": "https://suno.com/create",
-         "type": "music",
-         "paid": true
-      },
-      {
-         "title": "udio",
-         "url": "https://www.udio.com/my-creations",
-         "type": "music",
-         "paid": false
-      }
-   ]
+  "links": [
+    {
+      "title": "suno",
+      "url": "https://suno.com/create",
+      "type": "music",
+      "paid": true,
+      "id": "46cd"
+    },
+    {
+      "title": "udio",
+      "url": "https://www.udio.com/my-creations",
+      "type": "music",
+      "paid": false,
+      "id": "75f0"
+    },
+    {
+      "title": "excalidraw",
+      "url": "",
+      "type": "code",
+      "paid": false,
+      "id": "3df5"
+    }
+  ]
 }

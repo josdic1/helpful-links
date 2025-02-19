@@ -7,6 +7,9 @@ const init = () => {
   const list = document.getElementById('list')
 
   //stateful variables
+
+  let inEditMode = false
+
   let links = []
 
   let formData = {
@@ -24,8 +27,69 @@ const init = () => {
     paid: false
   }
 
+  let errorMessage;
+
   //initial fetch
   fetchLinks()
+
+
+  //render form
+  function renderForm() {
+    const formHtml =
+      `<label for="inputTitle">Title: </label>
+      <input type="text" id="inputTitle" class="form-input" name="title" placeholder="Website name goes here..." />
+      <label for="inputUrl">URL: </label>
+      <input type="url" id="inputUrl" class="form-input" name="url" placeholder="URL goes here..." />
+      <label for="inputType">Type: </label>
+      <input type="text" id="inputType" class="form-input" name="type" placeholder="Link type goes here..." />
+      <label for="inputPaid">Paid: </label>
+      <input type="checkbox" id="inputPaid" class="form-input" name="paid" !checked/>
+      <button type='submit' class="form-button" name="submit" id="buttonSubmit">Submit</button>
+       <button type='button' class="form-button" name="clear" id="buttonClear">Clear</button>
+      `
+
+
+    form.innerHTML = formHtml
+
+    document.querySelectorAll('.form-input').forEach(input => {
+      input.addEventListener('input', handleFormInput)
+    })
+
+    document.getElementById('buttonSubmit').addEventListener('click', handleSubmitClick)
+
+    document.getElementById('buttonClear').addEventListener('click', handleClearClick)
+
+  }
+
+  // form handler fucntions
+  function handleFormInput(e) {
+    const { name, type, value, checked } = e.target
+    if (inEditMode) {
+      console.log('working on it...')
+    } else {
+      formData = {
+        ...formData,
+        [name]: type !== 'checkbox' ? value : checked
+      }
+    }
+  }
+
+  function handleSubmitClick(e) {
+    e.preventDefault()
+    let formInput = {}
+    if (inEditMode) {
+      console.log('working on it...')
+    } else {
+      formInput = formData
+      handleNewLink(formInput)
+    }
+
+  }
+
+
+  function handleClearClick() {
+
+  }
 
   //render list
   function renderList(data) {
@@ -49,6 +113,7 @@ const init = () => {
           <button type='button' class='list-button' name='del' id=${link.id}>
             Del
           </button>
+          <td>${link.url === "" ? "🚫 URL" : ""}</td>
         </td>
       </tr>`
     ))
@@ -64,6 +129,7 @@ const init = () => {
             <th>View</th>
             <th>Edit</th>
             <th>Delete</th>
+            <th>⚠</th>
           </tr>
         </thead>
         <tbody>
@@ -77,10 +143,12 @@ const init = () => {
       btn.addEventListener('click', handleListButtonClick)
     })
 
+
+
+
   }
 
-  // handler function
-
+  // list button handler function
 
   function handleListButtonClick(e) {
     const { id, name } = e.target
@@ -104,6 +172,16 @@ const init = () => {
     }
   }
 
+  // view button click
+  function onViewClick(obj) {
+    if (obj.url === "") {
+      console.error('The URL is empty!')
+      return;
+    } else {
+      window.open(`${obj.url}`, '_blank');
+    }
+  }
+
 
 
   //async fucntions
@@ -118,9 +196,38 @@ const init = () => {
       const data = await r.json()
       links = data
       renderList(data)
+      renderForm()
     } catch (error) { console.error(error) }
   }
 
+  async function handleNewLink(newObj) {
+    try {
+      const r = await fetch(`http://localhost:3000/links`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(newObj)
+      })
+      if (!r.ok) {
+        throw new Error('POST: bad request')
+      }
+      await fetchLinks()
+    } catch (error) { console.error(error) }
+  }
+
+
+  async function handleDelete(obj) {
+    try {
+      const r = await fetch(`http://localhost:3000/links/${obj.id}`, {
+        method: 'DELETE'
+      })
+      if (!r.ok) {
+        throw new Error('PATCH: bad request')
+      }
+      await fetchLinks()
+    } catch (error) { console.error(error) }
+  }
 
 
 
