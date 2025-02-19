@@ -30,7 +30,11 @@ const init = () => {
     paid: false
   }
 
-  let errorMessage;
+  let filterObj = {
+    title: '',
+    type: 'all',
+    paid: 'all'
+  }
 
   //initial fetch
   fetchLinks()
@@ -113,8 +117,8 @@ const init = () => {
   //render filter
   function renderFilter() {
     const filterHtml =
-      `<input type='text' id='filterText' name='text' class='filter-input' placeholder='Filter by text...' />
-      <select id='filterSelectType' name='select' class='filter-select'>
+      `<input type='text' id='filterTitle' name='title' class='filter-input' placeholder='Filter by text...' />
+      <select id='filterSelectType' name='type' class='filter-select'>
         <option value='all' selected>Show all (types)...</option>
         <option value='code'> Code </option>
          <option value='music'> Music </option>
@@ -124,44 +128,79 @@ const init = () => {
         <option value='paid'> Paid </option>
          <option value='free'> Free </option>
       </select>
-      <button type='button' id='filterClear' name='clear' class="filter-button"> Clear Filter </button><br>
+      <button type='button' id='filterButtonClear' name='clear' class="filter-button"> Clear Filter </button><br>
           <select id='sortSelect' name='sort' class='filter-select'>
         <option value='all' selected disabled>Sort...</option>
         <option value='ascByTitle'> A-Z (title) </option>
           <option value='descByTitle'> Z-A (title) </option>
                <option value='ascByType'> A-Z (type) </option>
          <option value='descByType'> Z-A (type) </option>
-           <option value='isPaid'> Paid </option>
-             <option value='isFree'> Free </option>
+           <option value='isPaid'> A-Z (paid) </option>
+             <option value='isFree'> Z-A (paid) </option>
       </select>
-            <button type='button' id='sortClear' name='clear' class="sort-button"> Clear Sort </button>
+            <button type='button' id='sortButtonClear' name='clear' class="filter-button"> Clear Sort </button>
       `
 
     filter.innerHTML = filterHtml
 
-    document.getElementById('filterText').addEventListener('input', handleFilterText)
-    document.getElementById('filterSelectType').addEventListener('change', handleFilterSelectType)
-    document.getElementById('filterSelectPaid').addEventListener('change', handleFilterSelectPaid)
-    document.getElementById('filterClear').addEventListener('click', handleFilterClear)
+    document.getElementById('filterTitle').addEventListener('input', handleFilter)
+
+    document.getElementById('filterSelectType').addEventListener('change', handleFilter)
+
+    document.getElementById('filterSelectPaid').addEventListener('change', handleFilter)
+
+    document.getElementById('filterButtonClear').addEventListener('click', handleFilterClear)
+
+    document.getElementById('sortSelect').addEventListener('change', handleSortSelect)
+
+    document.getElementById('sortButtonClear').addEventListener('click', handleSortClear)
   }
+
+
+
 
   //filter by text
-  function handleFilterText(e) {
-
+  function handleFilter(e) {
+    const { name, value } = e.target
+    filterObj = {
+      ...filterObj,
+      [name]: value
+    }
+    const currentFilter = filterObj
+    const filteredList = [...links].filter(link => (
+      (link.title.toLowerCase().includes(currentFilter.title.toLowerCase()) ||
+        link.description.toLowerCase().includes(currentFilter.title.toLowerCase())
+        || currentFilter.title === '') &&
+      (link.type === currentFilter.type || currentFilter.type === 'all') &&
+      (link.paid ? 'paid' : 'free' === currentFilter.paid || currentFilter.paid === 'all')
+    ))
+    renderList(filteredList)
   }
 
-  //filter by type
-  function handleFilterSelectType(e) {
 
-  }
-
-  //filter by paid
-  function handleFilterSelectPaid(e) {
-
-  }
 
   //clear filter
-  function handleFilterClear(e) {
+  function handleFilterClear() {
+    document.getElementById('filterTitle').value = "";
+    document.getElementById('filterSelectType').value = "all";
+    document.getElementById('filterSelectPaid').value = "all";
+    filterObj = {
+      title: '',
+      type: 'all',
+      paid: 'all'
+    }
+    renderList(links)
+  }
+
+
+
+  //sort by selection
+  function handleSortSelect(e) {
+
+  }
+
+  //clear sort
+  function handleSortClear() {
 
   }
 
