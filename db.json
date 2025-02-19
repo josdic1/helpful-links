@@ -1,0 +1,16 @@
+{
+   "links": [
+      {
+         "title": "suno",
+         "url": "https://suno.com/create",
+         "type": "music",
+         "paid": true
+      },
+      {
+         "title": "udio",
+         "url": "https://www.udio.com/my-creations",
+         "type": "music",
+         "paid": false
+      }
+   ]
+}
