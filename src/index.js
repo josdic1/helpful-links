@@ -104,7 +104,7 @@ const init = () => {
     document.getElementById('inputTitle').value = ''
     document.getElementById('inputUrl').value = ''
     document.getElementById('inputType').value = ''
-    document.getElementById('inputPaid').value = false
+    document.getElementById('inputPaid').checked = false
   }
 
   //render list
